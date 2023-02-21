@@ -8,7 +8,8 @@
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/index.js",
     "start:dev": "npx nodemon",
-    "watching": "nodemon"
+    "watching": "nodemon",
+    "watch-node": "npm run build-ts & npm run tslint && nodemon dist/start.js"
   },
   "keywords": [],
   "author": "",

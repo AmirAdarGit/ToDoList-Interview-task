@@ -1,9 +1,10 @@
-import mysql from 'mysql';
+import mysql from 'mysql2/promise';
 
 class Database {
 
   private static dbInstance: Database;
   private static dbPool: mysql.Pool;
+
   private constructor() {
     this.connectToDb();
   }
@@ -24,14 +25,26 @@ class Database {
   }
 
   public getAllTasksFromDb() {
-    Database.dbPool.query("select * from todolist.users", (res, err) => {
-      if (err){
+    Database.dbPool.query("select * from todolist.users", (res: any, err: Error) => {
+      if (err) {
         console.log(err)
-      }
-      else {
+      } else {
         console.log(res)
       }
     })
+  }
+
+  userLogInAndReturnExistsTasks = async (email: string, name: string, imageUrl: string) => {
+    const insertSql = `INSERT IGNORE INTO todolist.users (email, name, imageUrl) VALUES ('${ email }', '${ name }', '${ imageUrl }')`;
+    try {
+      await Database.dbPool.query(insertSql);
+      const getAllTaskToDoSql = `SELECT tasksToDo FROM todolist.tasks WHERE email = "${email}";`;
+      const response: any = await Database.dbPool.query(getAllTaskToDoSql);
+      const tasksToDo = response[0][0].tasksToDo;
+      return tasksToDo;
+    } catch (e) {
+      console.log("Error happen while trying to insert new row to the table", e);
+    }
   }
 
 

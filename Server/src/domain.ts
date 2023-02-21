@@ -31,6 +31,12 @@ class ToDoList {
   deleteAllTask(name: string): void {
     console.log("delete all the tasks logic..")
   }
+
+  userLogInAndReturnExistsTasks = async (email: string, name: string, imageUrl: string) => {
+    const tasksToDo: Array<string> = await this.mySqlDb.userLogInAndReturnExistsTasks(email, name, imageUrl);
+    console.log("delete all the tasks logic..")
+    return tasksToDo;
+  }
 }
 
 
