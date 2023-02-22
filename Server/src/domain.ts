@@ -16,8 +16,9 @@ class ToDoList {
     return ToDoList.todolist;
   }
 
-  insertTask(): void {
-    console.log("insert new task logic..")
+  insertTask = async (email: string, tasksToDo: Array<string>)  => {
+    await this.mySqlDb.insertTasksByEmail(email, tasksToDo);
+    return tasksToDo;
   }
 
   getAllTasks(): Array<string> {
@@ -34,7 +35,6 @@ class ToDoList {
 
   userLogInAndReturnExistsTasks = async (email: string, name: string, imageUrl: string) => {
     const tasksToDo: Array<string> = await this.mySqlDb.userLogInAndReturnExistsTasks(email, name, imageUrl);
-    console.log("delete all the tasks logic..")
     return tasksToDo;
   }
 }

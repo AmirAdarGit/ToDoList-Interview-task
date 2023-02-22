@@ -15,43 +15,34 @@ app.use('/', router);
 
 const todolistInstance = ToDoList.getInstance()
 
-router.get('/getAllToDoList', (req: Request, res: Response) => {
-  try {
-    todolistInstance.getAllTasks()
-    res.json({message: 'getAllToDoList'});
-  } catch (e) {
-    console.log("Error in /gerAllToDoList Api - ", e);
-  }
-});
+// router.get('/getAllToDoList', (req: Request, res: Response) => {
+//   try {
+//     todolistInstance.getAllTasks()
+//     res.json({message: 'getAllToDoList'});
+//   } catch (e) {
+//     console.log("Error in /gerAllToDoList Api - ", e);
+//   }
+// });
+//
+// router.post('/addToDoTask', (req: Request, res: Response) => {
+//   try {
+//     // todolistInstance.insertTask()
+//     res.json({message: 'addToDoTask'});
+//   } catch (e) {
+//     console.log("Error in /addToDoTask Api - ", e);
+//   }
+//
+// });
+// router.delete('/delete', (req: Request, res: Response) => {
+//   try {
+//     // todolistInstance.insertTask()
+//     res.json({message: 'delete'});
+//   } catch (e) {
+//     console.log("Error in /delete Api - ", e);
+//   }
+// });
 
-router.post('/addToDoTask', (req: Request, res: Response) => {
-  try {
-    todolistInstance.insertTask()
-    res.json({message: 'addToDoTask'});
-  } catch (e) {
-    console.log("Error in /addToDoTask Api - ", e);
-  }
-
-});
-router.delete('/delete', (req: Request, res: Response) => {
-  try {
-    todolistInstance.insertTask()
-    res.json({message: 'delete'});
-  } catch (e) {
-    console.log("Error in /delete Api - ", e);
-  }
-});
-
-router.delete('/addToDoTask', (req: Request, res: Response) => {
-  try {
-    todolistInstance.insertTask()
-    res.json({message: 'addToDoTask'});
-  } catch (e) {
-    console.log("Error in /addToDoTask Api - ", e);
-  }
-});
-
-router.post('/googleAuth', async (req: Request, res: Response) => {
+router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response) => {
   try {
     const {name, email, imageUrl} = req.body;
     if (!name || !email || !imageUrl) {
@@ -63,6 +54,21 @@ router.post('/googleAuth', async (req: Request, res: Response) => {
     console.log("Error in /addToDoTask Api - ", e);
   }
 });
+
+router.post('/addTasks', async (req: Request, res: Response) => {
+  try {
+    const { email, tasksToDo } = req.body;
+    if (!tasksToDo || !email) {
+      throw new Error("missing params");
+    }
+    await todolistInstance.insertTask(email, tasksToDo);
+    res.json({message: 'addToDoTask'});
+  } catch (e) {
+    console.log("Error in /addToDoTask Api - ", e);
+  }
+});
+
+
 
 
 export default app;
