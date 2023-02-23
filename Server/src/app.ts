@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import ToDoList from "./domain";
 
 // create a new Express app
@@ -8,6 +9,7 @@ const app = express();
 // configure middleware to parse incoming requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors()); // Use this after the variable declaration
 
 const router: Router = express.Router();
 app.use('/', router);
@@ -44,12 +46,13 @@ const todolistInstance = ToDoList.getInstance()
 
 router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response) => {
   try {
-    const {name, email, imageUrl} = req.body;
+    const { userData } = req.body;
+    const { name, email, imageUrl } = userData;
     if (!name || !email || !imageUrl) {
       throw new Error("missing params");
     }
-    const tasksToto = await todolistInstance.userLogInAndReturnExistsTasks(email, name, imageUrl);
-    res.json({tasksToto});
+    const tasksToDo = await todolistInstance.userLogInAndReturnExistsTasks(email, name, imageUrl);
+    res.json({tasksToDo});
   } catch (e) {
     console.log("Error in /addToDoTask Api - ", e);
   }
