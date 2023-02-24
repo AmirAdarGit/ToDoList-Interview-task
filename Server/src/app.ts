@@ -46,12 +46,14 @@ const todolistInstance = ToDoList.getInstance()
 
 router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response) => {
   try {
+    console.log("121212121121121212")
     const { userData } = req.body;
     const { name, email, imageUrl } = userData;
     if (!name || !email || !imageUrl) {
       throw new Error("missing params");
     }
     const tasksToDo = await todolistInstance.userLogInAndReturnExistsTasks(email, name, imageUrl);
+    console.log("tasksToDo", tasksToDo)
     res.json({tasksToDo});
   } catch (e) {
     console.log("Error in /addToDoTask Api - ", e);
@@ -60,6 +62,7 @@ router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response
 
 router.post('/addTasks', async (req: Request, res: Response) => {
   try {
+    console.log("in add Tasks")
     const { email, tasksToDo } = req.body;
     if (!tasksToDo || !email) {
       throw new Error("missing params");

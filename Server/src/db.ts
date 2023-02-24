@@ -44,7 +44,7 @@ class Database {
       if (response[0][0]?.tasksToDo) {
         tasksToDo = response[0][0].tasksToDo;
       } else {
-        const insertNewUserWithEmptyTasksSqlQuery = `INSERT INTO todolist.tasks (email, tasksToDo) VALUES ('${ email }', '[]')`;
+        const insertNewUserWithEmptyTasksSqlQuery = `INSERT IGNORE INTO todolist.tasks (email, tasksToDo) VALUES ('${ email }', '[]')`;
         await Database.dbPool.query(insertNewUserWithEmptyTasksSqlQuery);
         tasksToDo = [];
       }
@@ -57,8 +57,7 @@ class Database {
   insertTasksByEmail = async (email: string, tasksToDo: Array<string>) => {
     const insertTasksToDoSqlQuery = `UPDATE todolist.tasks SET tasksToDo = '${JSON.stringify(tasksToDo)}' WHERE email = '${email}';`;
     try {
-      const res = await Database.dbPool.query(insertTasksToDoSqlQuery);
-      console.log(res)
+      await Database.dbPool.query(insertTasksToDoSqlQuery);
     } catch (e) {
       console.log("Error happen while trying to insert new row to the table", e);
     }

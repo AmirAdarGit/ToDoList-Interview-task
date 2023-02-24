@@ -13,7 +13,7 @@ interface Props {
 export const ClearCompletedTasks: React.FC<Props> = ({ filterCompleteHandler }) => {
   return (
     <ButtonRegularStyled onClick={filterCompleteHandler}>
-      Clear Completed Tasks
+      Clear All The Tasks
     </ButtonRegularStyled>
   );
 }

@@ -5,7 +5,9 @@ import ToDo from "./ToDo.compontne";
 const ToDoListWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
+  height: 700px;
+  overflow-y: auto;
 `;
 
 interface Props {
@@ -16,8 +18,8 @@ interface Props {
 export const ToDoList: React.FC<Props> = ({ toDoList, toggleHandler }) => {
   return (
     <ToDoListWrapperStyled>
-      {toDoList.map((task: any) => {
-        return <ToDo todo={task} key={task.id} toggleHandler={toggleHandler} />;
+      {toDoList.map((task: any, index: number) => {
+        return <ToDo todo={task} key={task.id} toggleHandler={toggleHandler} taskNumber={index + 1}/>;
       })}
     </ToDoListWrapperStyled>
   );

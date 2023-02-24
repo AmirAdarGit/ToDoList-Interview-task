@@ -18,7 +18,6 @@ export const BasicButton = styled.button`
   border-radius: ${({ theme }) => theme.borderRadiuses.round}px;
   border: transparent;
 
-  background-color: transparent;
   // @ts-ignore
   transition: ${({ theme }) => `opacity 0.6s ${theme.easing.easeOut}`};
 
