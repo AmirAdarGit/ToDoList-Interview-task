@@ -2,14 +2,14 @@ import express, { Request, Response, Router } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import ToDoList from "./domain";
+import dotenv from 'dotenv';
 
-// create a new Express app
+dotenv.config();
+
 const app = express();
-
-// configure middleware to parse incoming requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cors()); // Use this after the variable declaration
+app.use(cors());
 
 const router: Router = express.Router();
 app.use('/', router);
@@ -17,43 +17,17 @@ app.use('/', router);
 
 const todolistInstance = ToDoList.getInstance()
 
-// router.get('/getAllToDoList', (req: Request, res: Response) => {
-//   try {
-//     todolistInstance.getAllTasks()
-//     res.json({message: 'getAllToDoList'});
-//   } catch (e) {
-//     console.log("Error in /gerAllToDoList Api - ", e);
-//   }
-// });
-//
-// router.post('/addToDoTask', (req: Request, res: Response) => {
-//   try {
-//     // todolistInstance.insertTask()
-//     res.json({message: 'addToDoTask'});
-//   } catch (e) {
-//     console.log("Error in /addToDoTask Api - ", e);
-//   }
-//
-// });
-// router.delete('/delete', (req: Request, res: Response) => {
-//   try {
-//     // todolistInstance.insertTask()
-//     res.json({message: 'delete'});
-//   } catch (e) {
-//     console.log("Error in /delete Api - ", e);
-//   }
-// });
 
 router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response) => {
   try {
-    console.log("121212121121121212")
+    console.info('%cIn /logInUserAndReturnExistsTasks API', 'color: blue; font-weight: bold;');
+    console.info("");
     const { userData } = req.body;
     const { name, email, imageUrl } = userData;
     if (!name || !email || !imageUrl) {
       throw new Error("missing params");
     }
     const tasksToDo = await todolistInstance.userLogInAndReturnExistsTasks(email, name, imageUrl);
-    console.log("tasksToDo", tasksToDo)
     res.json({tasksToDo});
   } catch (e) {
     console.log("Error in /addToDoTask Api - ", e);
@@ -62,7 +36,8 @@ router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response
 
 router.post('/addTasks', async (req: Request, res: Response) => {
   try {
-    console.log("in add Tasks")
+    console.info('%cIn /addTasks API', 'color: blue; font-weight: bold;');
+
     const { email, tasksToDo } = req.body;
     if (!tasksToDo || !email) {
       throw new Error("missing params");

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
-import exp from "constants";
+import { LINE_THROUGH } from "../utils/constants";
 
 const TodoStyled = styled.div<{ isSelected: boolean }>`
   background-color: ${ (props: any) => props.theme.color.primary };
@@ -9,7 +9,7 @@ const TodoStyled = styled.div<{ isSelected: boolean }>`
   border-radius: 16px;
   cursor: pointer;
   width: auto;
-  text-decoration: ${ (props: any) => props.isSelected && "line-through" };
+  text-decoration: ${ (props: any) => props.isSelected && LINE_THROUGH };
 `;
 
 interface Props {

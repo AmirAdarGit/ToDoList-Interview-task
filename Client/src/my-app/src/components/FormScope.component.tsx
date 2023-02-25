@@ -5,6 +5,7 @@ import { SelectButton } from "../styled/buttons";
 import ClearCompletedTasks from "./ClearCompletedTasks.component";
 import { setAllTaskAction } from "../redux/actions";
 import { useDispatch } from "react-redux";
+import { INPUT_NEW_TASK } from "../utils/constants";
 
 
 const InputRegularStyled = styled.input`
@@ -57,7 +58,7 @@ export const FormScope: React.FC<Props> = ({addNewTaskHandler, toDoListData}) =>
       <FormWrapper onSubmit={ onSubmitHandler }>
         <InputRegularStyled
           value={ inputTask }
-          placeholder="input new task"
+          placeholder={INPUT_NEW_TASK}
           type="text"
           onChange={ onChangeHandle }
         />

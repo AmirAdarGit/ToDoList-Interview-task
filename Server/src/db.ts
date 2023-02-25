@@ -1,4 +1,13 @@
 import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+
+import {
+  CREATE_TASKS_TABLE,
+  CREATE_USERS_TABLE,
+  DESCRIBE_SQL_QUERY, insertIntoTasksTableEmptyListQuery,
+  insertIntoUserTableQuery, selectTasksToDoFromTasksTableQuery, updateIntoTasksTableListOfTasksQuery
+} from "./utils/db.queries";
+import { ER_NO_SUCH_TABLE, LOCALHOST, ROOT } from "./utils/constance";
 
 class Database {
 
@@ -7,45 +16,76 @@ class Database {
 
   private constructor() {
     this.connectToDb();
+    this.createTables();
   }
 
   private connectToDb() {
     Database.dbPool = mysql.createPool({
-      host: "localhost",
-      user: "root",
-      password: "amirA123",
+      host: LOCALHOST,
+      user: ROOT,
+      password: process.env.DATABASE_ROOT_PASSWORD,
     });
   }
 
-  public static getInstance(): Database {
-    if (!Database.dbInstance) {
-      this.dbInstance = new Database();
+  private createTables = async () => {
+    try {
+      await this.createUsersTable()
+    } catch (e) {
+      console.log("Fail to create users table", e);
     }
-    return this.dbInstance;
+    try {
+      await this.createTasksTable()
+    } catch (e) {
+      console.log("Fail to create tasks table", e);
+    }
+
   }
 
-  public getAllTasksFromDb() {
-    Database.dbPool.query("select * from todolist.users", (res: any, err: Error) => {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log(res)
+  private createUsersTable = async () => {
+
+    try {
+      await Database.dbPool.query(DESCRIBE_SQL_QUERY);
+      console.log("Users table exist, should not create new table")
+    } catch (e: any) { // if the table is not exist create new table
+      if (e.code === ER_NO_SUCH_TABLE) {
+        console.log("Users table does not exist, should create table")
+        await Database.dbPool.query(CREATE_USERS_TABLE);
+        console.log("created users table")
       }
-    })
+      console.log(e)
+    }
+  }
+
+  private createTasksTable = async () => {
+    try {
+      await Database.dbPool.query(DESCRIBE_SQL_QUERY);
+      console.log("Tasks table exist, should not create new table")
+    } catch (e: any) { // if the table is not exist create new table
+      if (e.code === ER_NO_SUCH_TABLE) {
+        console.log("Tasks table does not exist, should create table")
+        await Database.dbPool.query(CREATE_TASKS_TABLE);
+        console.log("created tasks table")
+      }
+    }
+  }
+
+  public static getInstance(): Database | undefined {
+
+    if (!Database.dbInstance) {
+      this.dbInstance = new Database();
+      return this.dbInstance;
+    }
   }
 
   userLogInAndReturnExistsTasks = async (email: string, name: string, imageUrl: string) => {
-    const insertSqlQuery = `INSERT IGNORE INTO todolist.users (email, name, imageUrl) VALUES ('${ email }', '${ name }', '${ imageUrl }')`;
     try {
-      await Database.dbPool.query(insertSqlQuery);
-      const getAllTaskToDoSqlQuery = `SELECT tasksToDo FROM todolist.tasks WHERE email = "${ email }"`;
-      const response: any = await Database.dbPool.query(getAllTaskToDoSqlQuery);
+      await Database.dbPool.query(insertIntoUserTableQuery(email,name,imageUrl));
+      const response: any = await Database.dbPool.query(selectTasksToDoFromTasksTableQuery(email));
       let tasksToDo;
       if (response[0][0]?.tasksToDo) {
         tasksToDo = response[0][0].tasksToDo;
       } else {
-        const insertNewUserWithEmptyTasksSqlQuery = `INSERT IGNORE INTO todolist.tasks (email, tasksToDo) VALUES ('${ email }', '[]')`;
-        await Database.dbPool.query(insertNewUserWithEmptyTasksSqlQuery);
+        await Database.dbPool.query(insertIntoTasksTableEmptyListQuery(email));
         tasksToDo = [];
       }
       return tasksToDo;
@@ -55,9 +95,8 @@ class Database {
   }
 
   insertTasksByEmail = async (email: string, tasksToDo: Array<string>) => {
-    const insertTasksToDoSqlQuery = `UPDATE todolist.tasks SET tasksToDo = '${JSON.stringify(tasksToDo)}' WHERE email = '${email}';`;
     try {
-      await Database.dbPool.query(insertTasksToDoSqlQuery);
+      await Database.dbPool.query(updateIntoTasksTableListOfTasksQuery(tasksToDo, email));
     } catch (e) {
       console.log("Error happen while trying to insert new row to the table", e);
     }
