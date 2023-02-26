@@ -29,7 +29,8 @@ router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response
     const tasksToDo = await todolistInstance.userLogInAndReturnExistsTasks(email, name, imageUrl);
     res.json({tasksToDo});
   } catch (e) {
-    console.log("Error in /addToDoTask Api - ", e);
+    console.log("Error in /logInUserAndReturnExistsTasks Api - ", e);
+    res.status(400).json({ error: 'error in logInUserAndReturnExistsTasks Api' });
   }
 });
 
@@ -45,6 +46,7 @@ router.post('/addTasks', async (req: Request, res: Response) => {
     res.json({message: 'addToDoTask'});
   } catch (e) {
     console.log("Error in /addToDoTask Api - ", e);
+    res.status(400).json({ error: 'error in addTasks Api' });
   }
 });
 
