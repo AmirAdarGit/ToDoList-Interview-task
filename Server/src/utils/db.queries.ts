@@ -14,7 +14,8 @@ export const CREATE_TASKS_TABLE = `CREATE TABLE todolist.tasks (
   FOREIGN KEY (email) REFERENCES todolist.users(email)
 );`
 
-export const DESCRIBE_SQL_QUERY = `DESCRIBE todolist.users`
+export const DESCRIBE_USER_TABLE_SQL_QUERY = `DESCRIBE todolist.users`
+export const DESCRIBE_TASKS_TABLE_SQL_QUERY = `DESCRIBE todolist.tasks`
 
 export const insertIntoUserTableQuery = (email: string, name: string, imageUrl: string) => {
   return `INSERT IGNORE INTO todolist.users (email, name, imageUrl) VALUES ('${ email }', '${ name }', '${ imageUrl }')`;

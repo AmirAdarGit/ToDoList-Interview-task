@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise';
 import {
   CREATE_TASKS_TABLE,
   CREATE_USERS_TABLE,
-  DESCRIBE_SQL_QUERY, insertIntoTasksTableEmptyListQuery,
+  DESCRIBE_TASKS_TABLE_SQL_QUERY, DESCRIBE_USER_TABLE_SQL_QUERY, insertIntoTasksTableEmptyListQuery,
   insertIntoUserTableQuery, selectTasksToDoFromTasksTableQuery, updateIntoTasksTableListOfTasksQuery
 } from "./utils/db.queries";
 import { ER_NO_SUCH_TABLE, LOCALHOST, ROOT } from "./utils/constance";
@@ -28,45 +28,32 @@ class Database {
 
   private createTables = async () => {
     try {
-      await this.createUsersTable()
+      await this.createTableByQuery(CREATE_USERS_TABLE, DESCRIBE_USER_TABLE_SQL_QUERY)
     } catch (e) {
       console.log("Fail to create users table", e);
     }
     try {
-      await this.createTasksTable()
+      await this.createTableByQuery(CREATE_TASKS_TABLE, DESCRIBE_TASKS_TABLE_SQL_QUERY)
     } catch (e) {
       console.log("Fail to create tasks table", e);
     }
 
   }
 
-  private createUsersTable = async () => {
+  private createTableByQuery = async (theQuery: string, describeTheTable: string) => {
 
     try {
-      await Database.dbPool.query(DESCRIBE_SQL_QUERY);
-      console.log("Users table exist, should not create new table")
+      await Database.dbPool.query(describeTheTable);
     } catch (e: any) { // if the table is not exist create new table
       if (e.code === ER_NO_SUCH_TABLE) {
-        console.log("Users table does not exist, should create table")
-        await Database.dbPool.query(CREATE_USERS_TABLE);
-        console.log("created users table")
+        console.log("the table does not exist, should create table")
+        await Database.dbPool.query(theQuery);
+        console.log("created table")
       }
       console.log(e)
     }
   }
 
-  private createTasksTable = async () => {
-    try {
-      await Database.dbPool.query(DESCRIBE_SQL_QUERY);
-      console.log("Tasks table exist, should not create new table")
-    } catch (e: any) { // if the table is not exist create new table
-      if (e.code === ER_NO_SUCH_TABLE) {
-        console.log("Tasks table does not exist, should create table")
-        await Database.dbPool.query(CREATE_TASKS_TABLE);
-        console.log("created tasks table")
-      }
-    }
-  }
 
   public static getInstance(): Database | undefined {
 
