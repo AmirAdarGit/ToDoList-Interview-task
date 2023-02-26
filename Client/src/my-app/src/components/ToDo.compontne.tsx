@@ -1,20 +1,11 @@
-import styled from "@emotion/styled";
 import React from "react";
-import { LINE_THROUGH } from "../utils/constants";
+import { TodoStyled } from "../styled/styleComponents";
+import { IToDoListData } from "../utils/interface";
 
-const TodoStyled = styled.div<{ isSelected: boolean }>`
-  background-color: ${ (props: any) => props.theme.color.primary };
-  padding: 8px;
-  margin: 8px;
-  border-radius: 16px;
-  cursor: pointer;
-  width: auto;
-  text-decoration: ${ (props: any) => props.isSelected && LINE_THROUGH };
-`;
 
 interface Props {
-  todo: any,
-  toggleHandler: any,
+  todo: IToDoListData,
+  toggleHandler: (todo: IToDoListData) => void,
   taskNumber: number
 }
 

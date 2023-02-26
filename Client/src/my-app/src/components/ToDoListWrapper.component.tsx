@@ -7,22 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToDoListState } from "../redux/reducer";
 import { addNewTaskAction, setAllTaskAction } from "../redux/actions";
 import { ADD_TASKS_API } from "../utils/constants";
-import { BasicButton } from "../styled/buttons";
-import styled from "@emotion/styled";
 import { GoogleLoginResponse } from "react-google-login";
+import { SaveBtnStyled } from "../styled/styleComponents";
 
 
 interface Props {
   loginData: GoogleLoginResponse,
   tasksToDo?: Array<IToDoListData>
 }
-
-const SaveBtnStyled = styled(BasicButton)`
-  height: 50px;
-  width: 400px;
-  background-color: darkseagreen;
-  align-self: center;
-`;
 
 
 export const ToDoListWrapper: React.FC<Props> = ({loginData}) => {
@@ -40,7 +32,6 @@ export const ToDoListWrapper: React.FC<Props> = ({loginData}) => {
   };
 
 
-  // add interface
   const toggleHandler = (taskToHandle: IToDoListData) => {
     const newList = toDoListData.map((task: IToDoListData) => {
       return taskToHandle.id === task.id

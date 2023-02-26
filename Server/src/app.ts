@@ -20,8 +20,7 @@ const todolistInstance = ToDoList.getInstance()
 
 router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response) => {
   try {
-    console.info('%cIn /logInUserAndReturnExistsTasks API', 'color: blue; font-weight: bold;');
-    console.info("");
+    console.log('/logInUserAndReturnExistsTasks API');
     const { userData } = req.body;
     const { name, email, imageUrl } = userData;
     if (!name || !email || !imageUrl) {
@@ -36,7 +35,7 @@ router.post('/logInUserAndReturnExistsTasks', async (req: Request, res: Response
 
 router.post('/addTasks', async (req: Request, res: Response) => {
   try {
-    console.info('%cIn /addTasks API', 'color: blue; font-weight: bold;');
+    console.log('/addTasks API');
 
     const { email, tasksToDo } = req.body;
     if (!tasksToDo || !email) {

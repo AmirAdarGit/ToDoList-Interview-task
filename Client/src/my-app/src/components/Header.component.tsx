@@ -1,11 +1,6 @@
-import styled from "@emotion/styled";
 import React from "react";
+import { HeaderStyled } from "../styled/styleComponents";
 
-const HeaderStyled = styled.div`
-  font-size: 45px;
-  font-variant: 56px;
-  font-style: italic;
-`;
 
 function Header() {
   return <HeaderStyled>To Do List</HeaderStyled>;

@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import React, { FormEvent, ChangeEvent } from "react";
 import { useState } from "react";
 import { SelectButton } from "../styled/buttons";
@@ -6,19 +5,7 @@ import ClearCompletedTasks from "./ClearCompletedTasks.component";
 import { setAllTaskAction } from "../redux/actions";
 import { useDispatch } from "react-redux";
 import { INPUT_NEW_TASK } from "../utils/constants";
-
-
-const InputRegularStyled = styled.input`
-  border-radius: 8px !important;
-  width: 500px;
-  font-size: 25px;
-  background-color: #61dafb;
-`;
-const FormWrapper = styled.form`
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-`;
+import { FormWrapper, InputRegularStyled } from "../styled/styleComponents";
 
 
 interface Props {

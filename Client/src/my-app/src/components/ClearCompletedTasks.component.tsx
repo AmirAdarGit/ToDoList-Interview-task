@@ -1,10 +1,7 @@
-import styled from "@emotion/styled";
 import React from "react";
-import { SelectButton } from "../styled/buttons";
+import { ButtonRegularStyled } from "../styled/styleComponents";
 
-const ButtonRegularStyled = styled(SelectButton)`
-  width: 243px;
-`;
+
 
 interface Props {
   filterCompleteHandler: () => void
